@@ -3,4 +3,5 @@
   <component name="JpaBuddyIdeaProjectConfig" newRepositoryParent="org.springframework.data.jpa.repository.JpaRepository">
     <option name="newEntityIdStrategy" value="Identity" />
   </component>
+  <component name="JpaPluginProjectSettings" repositoryEqualityConditionTypes="0, 2" />
 </project>

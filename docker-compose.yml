@@ -1,0 +1,33 @@
+services:
+  redis:
+    image: redis:7.2-alpine        # Küçük boyutlu alpine imajı
+    container_name: argela-redis
+    ports:
+      - "6379:6379"               # localhost:6379 → container:6379
+    volumes:
+      - redis-data:/data          # Veri kalıcılığı
+    command: redis-server --save 20 1 --loglevel warning --requirepass argela123
+    # --save 20 1  : 20 saniyede 1 değişiklik olursa diske kaydet
+    # --requirepass: Redis şifresi (dev ortamı için basit)
+    restart: unless-stopped
+    networks:
+      - argela-network
+
+  redis-commander:                 # Redis web UI (opsiyonel ama faydalı!)
+    image: rediscommander/redis-commander:latest
+    container_name: argela-redis-ui
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:argela123
+    ports:
+      - "8090:8081"              # http://localhost:8090
+    depends_on:
+      - redis
+    networks:
+      - argela-network
+
+volumes:
+  redis-data:
+
+networks:
+  argela-network:
+    driver: bridge

@@ -1,0 +1,19 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: argela123
+      lettuce:
+        pool:
+          max-active: 10   # Max bağlantı
+          max-idle: 5      # Boşta bekleyen max bağlantı
+          min-idle: 2      # Minimum boşta bağlantı
+          max-wait: -1ms   # Bağlantı beklemek için max süre (-1 = sonsuz)
+      timeout: 2000ms      # Bağlantı timeout
+
+  # Cache konfigürasyonu
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000  # 10 dakika (ms cinsinden)
