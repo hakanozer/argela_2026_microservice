@@ -3,6 +3,8 @@ package com.works.orderservice.service;
 import com.works.orderservice.dto.OrderBasketSaveDto;
 import com.works.orderservice.entity.OrderBasket;
 import com.works.orderservice.entity.OrderItem;
+import com.works.orderservice.event.OrderCreatedEvent;
+import com.works.orderservice.event.OrderEventPublisher;
 import com.works.orderservice.repository.OrderBasketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -20,6 +22,7 @@ import java.util.List;
 public class OrderBasketService {
 
     final private OrderBasketRepository orderBasketRepository;
+    final private OrderEventPublisher orderEventPublisher;
 
     @CacheEvict(cacheNames = "orderBaskets", allEntries = true)
     public OrderBasket save(OrderBasketSaveDto orderBasketSaveDto) {
@@ -28,7 +31,10 @@ public class OrderBasketService {
         //if (orderBasket.getItems() != null) {
           //  orderBasket.getItems().forEach(item -> item.setOrderBasket(orderBasket));
         //}
-        return orderBasketRepository.save(orderBasket);
+        orderBasketRepository.save(orderBasket);
+        OrderCreatedEvent event = OrderCreatedEvent.from(orderBasket);
+        orderEventPublisher.publishOrderCreated(event);
+        return orderBasket;
     }
 
     // sayfalamalı - page order listesi
