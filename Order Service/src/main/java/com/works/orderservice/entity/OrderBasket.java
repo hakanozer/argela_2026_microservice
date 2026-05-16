@@ -27,5 +27,5 @@ public class OrderBasket implements Serializable {
 
     //@JsonManagedReference
     //@OneToMany(mappedBy = "orderBasket", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<OrderItem> items;
+    private List<OrderItem> items;
 }

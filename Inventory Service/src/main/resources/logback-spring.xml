@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- ========================= -->
+    <!-- SPRING APP NAME -->
+    <!-- ========================= -->
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+
+    <!-- ========================= -->
+    <!-- CONSOLE APPENDER -->
+    <!-- ========================= -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========================= -->
+    <!-- ELASTICSEARCH APPENDER -->
+    <!-- ========================= -->
+    <appender name="ELASTIC" class="com.internetitem.logback.elasticsearch.ElasticsearchAppender">
+
+        <!-- ES 8 BULK API -->
+        <url>http://localhost:9200/_bulk</url>
+
+        <!-- Index strategy -->
+        <index>argela-logs-%date{yyyy.MM.dd}</index>
+
+        <loggerName>es-logger</loggerName>
+        <errorLoggerName>es-error-logger</errorLoggerName>
+
+        <!-- Headers -->
+        <headers>
+            <header>
+                <name>Content-Type</name>
+                <value>application/json</value>
+            </header>
+        </headers>
+
+        <!-- LOG PROPERTIES (IMPORTANT: no <name>/<value>) -->
+        <properties>
+            <service>${APP_NAME}</service>
+            <level>%level</level>
+            <thread>%thread</thread>
+            <logger>%logger</logger>
+            <message>%msg</message>
+            <timestamp>%date{ISO8601}</timestamp>
+        </properties>
+
+    </appender>
+
+    <!-- ========================= -->
+    <!-- ROOT LOGGER -->
+    <!-- ========================= -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ELASTIC"/>
+    </root>
+
+    <!-- ========================= -->
+    <!-- APP LOG LEVEL -->
+    <!-- ========================= -->
+    <logger name="com.argela" level="DEBUG"/>
+
+</configuration>
