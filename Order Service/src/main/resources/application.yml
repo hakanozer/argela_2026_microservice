@@ -1,9 +1,9 @@
 spring:
   data:
     redis:
-      host: localhost
-      port: 6379
-      password: argela123
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:argela123}
       timeout: 2000ms
 
       lettuce:
@@ -19,7 +19,7 @@ spring:
       time-to-live: 10
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
